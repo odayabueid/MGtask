@@ -1,8 +1,5 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom'
-
-import { makeStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 
 class News extends React.Component{
@@ -14,7 +11,8 @@ class News extends React.Component{
             newsArr:[],
             img:"",
             newbook:"",
-            redirect:false
+            redirect:false,
+            search:""
         }
     }
 
@@ -32,7 +30,7 @@ class News extends React.Component{
            })
       }
       componentDidMount(){
-        fetch("https://picsum.photos/100/100")
+        fetch("https://picsum.photos/100/100?rand=2")
           .then((data) => {
              console.log(data)
              this.setState({
@@ -49,6 +47,12 @@ class News extends React.Component{
         })
       }
 
+      Search(event){
+        this.setState({
+          search : event.target.value
+        })
+      }
+
       renderRedirect = () =>{
         if(this.state.redirect){
           return <Redirect to = {{
@@ -62,10 +66,27 @@ class News extends React.Component{
       }
 
       render(){
+        let filtered =this.state.newsArr.filter(
+            (fil) =>{
+              return fil.title.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
+            }
+          )
         return(
         <div>
+            
             {this.renderRedirect()}
-            {this.state.newsArr.map(news =>
+            <form class="form-inline" style={{display: 'flex',flexWrap: 'wrap',}}>
+                    <TextField
+                      id="outlined-search"
+                      label="Search field"
+                      type="search"
+                      style={{margin :"auto" , marginTop:"20px",marginRight:"theme.spacing(1)",width:"30%"}}
+                      margin="normal"
+                      variant="outlined"
+                      onChange= {this.Search.bind(this)}
+                    />
+              </form>
+            {filtered.map((news,index) =>
             <div onClick={(e) => {
                   this.setState({newbook:news},()=>{
                     this.details()
@@ -74,7 +95,7 @@ class News extends React.Component{
                   
             }}>
             <div className="card" style={{height:"20rem" ,width: "21rem" ,float:"left",margin:"10px"}}>
-                <img className="card-img-top" src={this.state.img} alt="Card image cap" height="200" width="300"/>
+                <img className="card-img-top" src={`https://picsum.photos/id/${index}/100/100`} alt="Card image cap" height="200" width="300"/>
                 <div className="card-body">
                     <p><span style={{fontWeight:"bold"}}>title: </span><span style={{color:"green"}}>{news.title}</span></p>
                 </div>

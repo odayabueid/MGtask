@@ -16,9 +16,9 @@ function App() {
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSszD_oyaSK8iPn0le-UhLU7U9A8HQ8OFd_D1UWbyadMdIcrfIWpw" alt="Smiley face" height="80" width="80"></img> */}
      <header>
       <ul>
-          <li className="active">
+          <span className="active">
           <a href="/">Home</a>
-          </li>
+          </span>
       </ul>
     {/* <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSszD_oyaSK8iPn0le-UhLU7U9A8HQ8OFd_D1UWbyadMdIcrfIWpw" alt="Smiley face" height="80" width="80"></img> */}
 
