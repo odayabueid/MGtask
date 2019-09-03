@@ -3,8 +3,6 @@ import { Redirect } from 'react-router-dom'
 import TextField from '@material-ui/core/TextField';
 
 class News extends React.Component{
-
-
     constructor(props){
         super(props);
         this.state = {   
@@ -12,16 +10,14 @@ class News extends React.Component{
             img:"",
             newbook:"",
             redirect:false,
-            search:""
+            search:"",
+            ind:""
         }
     }
-
-
     componentWillMount(){
         fetch("https://jsonplaceholder.typicode.com/posts")
           .then(data => data.json())
           .then((data) => {
-             console.log(data)
              this.setState({
                 newsArr:data
              })
@@ -29,7 +25,7 @@ class News extends React.Component{
             console.log(err)
            })
       }
-      componentDidMount(){
+    componentDidMount(){
         fetch("https://picsum.photos/100/100?rand=2")
           .then((data) => {
              console.log(data)
@@ -39,29 +35,28 @@ class News extends React.Component{
            }).catch((err)=>{
             console.log(err)
            })
-      }
-
-      details(){
+    }
+    details(){
         this.setState({
           redirect:true
         })
       }
 
-      Search(event){
+    Search(event){
         this.setState({
           search : event.target.value
         })
       }
 
-      renderRedirect = () =>{
+    renderRedirect = () =>{
         if(this.state.redirect){
-          return <Redirect to = {{
-            pathname:"info/",
-            // username:this.state.username,
-            state:{newbook:this.state.newbook,
-                    img:this.state.img
-            }
-          }}/>
+            return <Redirect to = {{
+                pathname:"info/",
+                state:{newbook:this.state.newbook,
+                    img:this.state.img,
+                    ind:this.state.ind
+                    }
+            }}/>
         }
       }
 
@@ -69,13 +64,11 @@ class News extends React.Component{
         let filtered =this.state.newsArr.filter(
             (fil) =>{
               return fil.title.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
-            }
-          )
+            })
         return(
-        <div>
-            
-            {this.renderRedirect()}
-            <form class="form-inline" style={{display: 'flex',flexWrap: 'wrap',}}>
+            <div>
+                {this.renderRedirect()}
+                <form class="form-inline" style={{display: 'flex',flexWrap: 'wrap',}}>
                     <TextField
                       id="outlined-search"
                       label="Search field"
@@ -85,38 +78,23 @@ class News extends React.Component{
                       variant="outlined"
                       onChange= {this.Search.bind(this)}
                     />
-              </form>
-            {filtered.map((news,index) =>
-            <div onClick={(e) => {
-                  this.setState({newbook:news},()=>{
-                    this.details()
+                </form>
+                {filtered.map((news,index) =>
+                    <div onClick={(e) => {
+                        this.setState({newbook:news,ind:index},()=>{
+                        this.details()
+                        })}}>
 
-                  })
-                  
-            }}>
-            <div className="card" style={{height:"20rem" ,width: "21rem" ,float:"left",margin:"10px"}}>
-                <img className="card-img-top" src={`https://picsum.photos/id/${index}/100/100`} alt="Card image cap" height="200" width="300"/>
-                <div className="card-body">
-                    <p><span style={{fontWeight:"bold"}}>title: </span><span style={{color:"green"}}>{news.title}</span></p>
-                </div>
-            </div>
-            </div>
-            )}
-          
-
-
-
-
-        
-
-
-        </div>)
-        
-    }
-
+                        <div className="card" style={{height:"20rem" ,width: "21rem" ,float:"left",margin:"10px"}}>
+                            <img className="card-img-top" src={`https://picsum.photos/id/${index}/100/100`} alt="Card image cap" height="200" width="300"/>
+                            <div className="card-body">
+                                <p><span style={{fontWeight:"bold"}}>title: </span><span style={{color:"green"}}>{news.title}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>)
+      }
 }
-
-
-
 
 export default News;
