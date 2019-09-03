@@ -32,7 +32,7 @@ class News extends React.Component{
            })
       }
       componentDidMount(){
-        fetch("https://picsum.photos/100/100?rand=2")
+        fetch("https://picsum.photos/100/100")
           .then((data) => {
              console.log(data)
              this.setState({
